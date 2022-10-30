@@ -1,64 +1,33 @@
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Image from "next/image";
 import styled from "styled-components";
 import * as Yup from "yup";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
 
+const Root = styled.div`
+  display: flex;
+`;
+
+const ColoredDiv = styled.div`
+  width: 50%;
+  background-color: blue;
+  height: 100vh;
+
+  postition: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const StyledForm = styled.div`
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 24px;
-  width: 500px;
-`;
-
-export const PageWrapper = styled.section`
-  &,
-  & * {
-    box-sizing: border-box;
-    display: block;
-  }
-
-  hr {
-    display: block;
-    border: none;
-    border-top: 1px solid lightgrey;
-
-    margin-top: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  font-family: system-ui;
-  font-size: 1rem;
-  line-height: 1.5rem;
-  max-width: 35em;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 1.5rem;
-  padding: 1rem 0.75rem;
-  border: 1px solid lightgrey;
-  border-radius: 4px;
-`;
-
-export const CodeWrapper = styled.pre`
-  font-family: monospace;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  background-color: hsl(210, 4%, 96%);
-  overflow: auto;
-  padding: 0.75rem;
-  margin: 0;
-  border-radius: 4px;
-
-  & strong {
-    margin-top: 1.5rem;
-
-    &:first-child {
-      margin-top: 0;
-    }
-  }
+  width: 50%;
 `;
 
 export const Title = styled.h1`
@@ -117,6 +86,8 @@ export const Submit = styled.button`
   }
 `;
 
+const ImageWrapper = styled.div``;
+
 export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
   const wallet = new BeaconWallet({ name: "Beacon Docs Taquito" });
@@ -127,6 +98,8 @@ export default function Home() {
   const [isAuthorNameFocused, setIsAuthorNameFocued] = useState(false);
   const [isTitleFocuesd, setIsTitleFocused] = useState(false);
   const [text, setText] = useState();
+  const [isStopped, setIsStopped] = useState(false);
+  const [color, setColor] = useState();
 
   Tezos.setWalletProvider(wallet);
 
@@ -143,48 +116,73 @@ export default function Home() {
 
   const handleSubmit = () => {};
 
+  const randColor = () => {
+    return (
+      "#" +
+      Math.floor(Math.random() * 16777215)
+        .toString(16)
+        .padStart(6, "0")
+        .toUpperCase()
+    );
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (isStopped) return;
+      // put this back
+      // setColor(randColor());
+    }, 300);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isStopped]);
+
   return (
-    <StyledForm>
-      {/* {address && (
+    <Root>
+      <ColoredDiv style={{ backgroundColor: color ?? "blue" }}>
+        <ImageWrapper>
+          <Image height={200} width={100} src={`/fff.svg`} alt={"test"} />
+        </ImageWrapper>
+      </ColoredDiv>
+      <StyledForm>
+        {/* {address && (
         <div>{`Awesome, you are connected with wallet: ${address}`}</div>
       )} */}
-      {/* <StyledForm
-            onSubmit={(e) => {
-              e.preventDefault();
-              submitForm(email);
-            }}
-          > */}
 
-      <InputField
-        disabled={false}
-        value={authorName}
-        onFocus={() => setIsAuthorNameFocued(true)}
-        onChange={(e) => setAuthorName(e.target.value)}
-        error={
-          isAuthorNameFocused && authorName.length <= 1 && "Bit too short, bae"
-        }
-        placeholder="Princess "
-        label="Author"
-        type="text"
-      />
-      <InputField
-        disabled={false}
-        onFocus={() => setIsTitleFocused(true)}
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        error={isTitleFocuesd && title.length <= 1 && "Bit too short, bae"}
-        placeholder="My great poem"
-        label="Title"
-        type="text"
-      />
-      <div>
-        <RichText
-          onKeyDown={(val) => setText(val)}
-          text={text}
-          isDisabled={false}
+        <InputField
+          disabled={false}
+          value={authorName}
+          onFocus={() => setIsAuthorNameFocued(true)}
+          onChange={(e) => setAuthorName(e.target.value)}
+          error={
+            isAuthorNameFocused &&
+            authorName.length <= 1 &&
+            "Bit too short, bae"
+          }
+          placeholder="Princess "
+          label="Author"
+          type="text"
         />
-      </div>
-      <MintConnectButton onClick={connectToWallet} />
-    </StyledForm>
+        <InputField
+          disabled={false}
+          onFocus={() => setIsTitleFocused(true)}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          error={isTitleFocuesd && title.length <= 1 && "Bit too short, bae"}
+          placeholder="My great poem"
+          label="Title"
+          type="text"
+        />
+        <div>
+          <RichText
+            onKeyDown={(val) => setText(val)}
+            text={text}
+            isDisabled={false}
+          />
+        </div>
+        <MintConnectButton onClick={connectToWallet} />
+      </StyledForm>
+    </Root>
   );
 }
