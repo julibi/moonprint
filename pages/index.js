@@ -1,8 +1,30 @@
+import { TezosToolkit } from "@taquito/taquito";
+import { BeaconWallet } from "@taquito/beacon-wallet";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
+import { useEffect } from "react";
 
 export default function Home() {
+  const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
+  const wallet = new BeaconWallet({ name: "Beacon Docs Taquito" });
+
+  Tezos.setWalletProvider(wallet);
+
+  const connectToWallet = async () => {
+    try {
+      console.log("Requesting permissions...");
+      const permissions = await wallet.client.requestPermissions();
+      console.log("Got permissions:", permissions.address);
+    } catch (error) {
+      console.log("Got error:", error);
+    }
+  };
+
+  useEffect(() => {
+    connectToWallet();
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
