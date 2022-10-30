@@ -1,7 +1,5 @@
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import Head from "next/head";
-import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
 import * as Yup from "yup";
@@ -9,7 +7,7 @@ import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
 
-const StyledForm = styled.form`
+const StyledForm = styled.div`
   border-radius: 10px;
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 24px;
@@ -123,7 +121,7 @@ export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
   const wallet = new BeaconWallet({ name: "Beacon Docs Taquito" });
   const [address, setAddress] = useState();
-  const [formValues, setFormValues] = useState();
+
   const [authorName, setAuthorName] = useState("");
   const [title, setTitle] = useState("");
   const [isAuthorNameFocused, setIsAuthorNameFocued] = useState(false);
@@ -144,13 +142,6 @@ export default function Home() {
   };
 
   const handleSubmit = () => {};
-
-  const validationSchema = Yup.object().shape({
-    authorName: Yup.string()
-      .min(2, "Name is too short")
-      .required("Please enter your name"),
-    title: Yup.string().required("Please enter your title"),
-  });
 
   return (
     <StyledForm>
@@ -193,7 +184,7 @@ export default function Home() {
           isDisabled={false}
         />
       </div>
-      <MintConnectButton />
+      <MintConnectButton onClick={connectToWallet} />
     </StyledForm>
   );
 }
