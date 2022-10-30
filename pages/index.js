@@ -142,7 +142,7 @@ export default function Home() {
     <Root>
       <ColoredDiv style={{ backgroundColor: color ?? "blue" }}>
         <ImageWrapper>
-          <Image height={200} width={100} src={`/fff.svg`} alt={"test"} />
+          <Image height={400} width={300} src={`/test.svg`} alt={"test"} />
         </ImageWrapper>
       </ColoredDiv>
       <StyledForm>
@@ -181,7 +181,15 @@ export default function Home() {
             isDisabled={false}
           />
         </div>
-        <MintConnectButton onClick={connectToWallet} />
+        <MintConnectButton
+          onClick={connectToWallet}
+          isConnected={!!address}
+          isDisabled={
+            authorName.length < 2 ||
+            title.length < 2 ||
+            !text?.[0]?.children?.[0]?.text?.length
+          }
+        />
       </StyledForm>
     </Root>
   );
