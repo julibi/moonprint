@@ -23,10 +23,6 @@ export default function Home() {
     }
   };
 
-  useEffect(() => {
-    connectToWallet();
-  }, []);
-
   return (
     <div className={styles.container}>
       <Head>
@@ -35,8 +31,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>MOONPRINT</main>
-      {address && (
+      {address ? (
         <div>{`Awesome, you are connected with wallet: ${address}`}</div>
+      ) : (
+        <button onClick={connectToWallet}>Connect Button</button>
       )}
       <footer className={styles.footer}>
         <span>
