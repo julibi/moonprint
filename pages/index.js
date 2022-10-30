@@ -130,7 +130,7 @@ export default function Home() {
     const interval = setInterval(() => {
       if (isStopped) return;
       // put this back
-      // setColor(randColor());
+      setColor(randColor());
     }, 300);
 
     return () => {

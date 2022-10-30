@@ -15,7 +15,6 @@ const StyledButton = styled.button`
 `;
 
 const MintConnectButton = ({ onClick, isConnected, isDisabled }) => {
-  console.log({ isDisabled });
   return isConnected ? (
     <StyledButton onClick={onClick} isDisabled={isDisabled}>
       MINT
