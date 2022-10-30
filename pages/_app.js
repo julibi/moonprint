@@ -2,6 +2,7 @@ import "../styles/globals.css";
 // import "../static/jank-empty.css";
 import Head from "next/head";
 import Layout from "../components/Layout";
+// import "localstorage-polyfill";
 
 function MyApp({ Component, pageProps }) {
   return (
