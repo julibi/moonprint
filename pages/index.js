@@ -7,6 +7,8 @@ import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
 import { useScreenshot, createFileName } from "use-react-screenshot";
+import { useIpfsClient } from "../hooks/useIpfsClient";
+import { fromString } from "uint8arrays/from-string";
 
 const Root = styled.div`
   display: flex;
@@ -124,32 +126,50 @@ export default function Home() {
   const [text, setText] = useState();
   const [isStopped, setIsStopped] = useState(false);
   const [color, setColor] = useState();
-  const [image, takeScreenshot] = useScreenshot();
+  const [image, takeScreenshot] = useScreenshot({
+    type: "image/jpeg",
+    quality: 1.0,
+  });
+  const client = useIpfsClient();
 
   const ref = createRef(null);
   const getImage = () => takeScreenshot(ref.current);
-  console.log(image);
+
   Tezos.setWalletProvider(wallet);
 
   // const downloadScreenshot = () => takeScreenshot(ref.current).then(download);
 
   const connectToWallet = async () => {
     try {
-      console.log("Requesting permissions...");
       const permissions = await wallet.client.requestPermissions();
       setAddress(permissions.address);
-      console.log("Got permissions:", permissions.address);
     } catch (error) {
       console.log("Got error:", error);
     }
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!address) {
       connectToWallet();
     } else {
       setIsStopped(true);
       getImage();
+      if (image) {
+        try {
+          // console.log(image.split(",")[1]);
+          // const data = fromString(image.split(",")[1], "base64");
+          console.log({ image });
+          const imageCID = (await client.add(image)).path;
+          console.log({ imageCID });
+          // const imageCID = (
+          //   await client.add("datadatadatadatadatadatadatadatadatadata")
+          // ).path;
+
+          console.log({ imageCID });
+        } catch (e) {
+          console.log({ e });
+        }
+      }
     }
   };
 

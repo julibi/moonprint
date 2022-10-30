@@ -11,7 +11,9 @@
   "dependencies": {
     "@taquito/beacon-wallet": "^14.0.0",
     "@taquito/taquito": "^14.0.0",
+    "dotenv": "^16.0.3",
     "html2canvas": "^1.4.1",
+    "ipfs-http-client": "^59.0.0",
     "localstorage-polyfill": "^1.0.1",
     "next": "12.1.0",
     "react": "^17.0.2",
@@ -20,6 +22,7 @@
     "slate-history": "^0.66.0",
     "slate-react": "^0.83.2",
     "styled-components": "^5.3.6",
+    "uint8arrays": "^4.0.2",
     "use-react-screenshot": "^3.0.0",
     "yup": "^0.32.11"
   },
