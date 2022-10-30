@@ -4,6 +4,11 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
 import { useEffect, useState } from "react";
+import styled from "styled-components";
+
+const Form = styled.div`
+  color: red;
+`;
 
 export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
@@ -36,6 +41,9 @@ export default function Home() {
       ) : (
         <button onClick={connectToWallet}>Connect Button</button>
       )}
+      <Form>
+        <h2>Styled component test</h2>
+      </Form>
       <footer className={styles.footer}>
         <span>
           {`Made with <3 by Moonprint Team`}
