@@ -145,13 +145,12 @@ export default function Home() {
   };
 
   const handleClick = () => {
-    // if (!address) {
-    //   connectToWallet();
-    // } else {
-    setIsStopped(true);
-    getImage();
-    // downloadScreenshot();
-    // }
+    if (!address) {
+      connectToWallet();
+    } else {
+      setIsStopped(true);
+      getImage();
+    }
   };
 
   const randColor = () => {
@@ -183,7 +182,7 @@ export default function Home() {
         {/* <Image height={400} width={200} src={`/moonpage.png`} alt={"test"} /> */}
         {/* </ImageWrapper> */}
         <TestBook>
-          <h3>Balblabla</h3>
+          <h3>{title}</h3>
           <AuthorName>{`by ${authorName}`}</AuthorName>
           <TextName>#textNFT</TextName>
         </TestBook>
