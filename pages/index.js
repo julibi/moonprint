@@ -3,11 +3,12 @@ import { BeaconWallet } from "@taquito/beacon-wallet";
 import Head from "next/head";
 import Image from "next/image";
 import styles from "../styles/Home.module.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
   const wallet = new BeaconWallet({ name: "Beacon Docs Taquito" });
+  const [address, setAddress] = useState();
 
   Tezos.setWalletProvider(wallet);
 
@@ -15,6 +16,7 @@ export default function Home() {
     try {
       console.log("Requesting permissions...");
       const permissions = await wallet.client.requestPermissions();
+      setAddress(permissions.address);
       console.log("Got permissions:", permissions.address);
     } catch (error) {
       console.log("Got error:", error);
@@ -33,6 +35,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>MOONPRINT</main>
+      {address && (
+        <div>{`Awesome, you are connected with wallet: ${address}`}</div>
+      )}
       <footer className={styles.footer}>
         <span>
           {`Made with <3 by Moonprint Team`}
