@@ -1,12 +1,12 @@
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { useState, useEffect } from "react";
+import { useState, useEffect, createRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import * as Yup from "yup";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
+import { useScreenshot, createFileName } from "use-react-screenshot";
 
 const Root = styled.div`
   display: flex;
@@ -16,11 +16,30 @@ const ColoredDiv = styled.div`
   width: 50%;
   background-color: blue;
   height: 100vh;
-
   postition: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const AuthorName = styled.span`
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+`;
+
+const TextName = styled.span`
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+`;
+
+const TestBook = styled.div`
+  height: 400px;
+  width: 350px;
+  border: 5px solid black;
+  text-align: center;
+  position: relative;
 `;
 
 const StyledForm = styled.div`
@@ -86,6 +105,11 @@ export const Submit = styled.button`
   }
 `;
 
+const StyledLabel = styled.label`
+  display: inline-block;
+  margin-block-end: 0.5rem;
+`;
+
 const ImageWrapper = styled.div``;
 
 export default function Home() {
@@ -100,8 +124,14 @@ export default function Home() {
   const [text, setText] = useState();
   const [isStopped, setIsStopped] = useState(false);
   const [color, setColor] = useState();
+  const [image, takeScreenshot] = useScreenshot();
 
+  const ref = createRef(null);
+  const getImage = () => takeScreenshot(ref.current);
+  console.log(image);
   Tezos.setWalletProvider(wallet);
+
+  // const downloadScreenshot = () => takeScreenshot(ref.current).then(download);
 
   const connectToWallet = async () => {
     try {
@@ -114,7 +144,15 @@ export default function Home() {
     }
   };
 
-  const handleSubmit = () => {};
+  const handleClick = () => {
+    // if (!address) {
+    //   connectToWallet();
+    // } else {
+    setIsStopped(true);
+    getImage();
+    // downloadScreenshot();
+    // }
+  };
 
   const randColor = () => {
     return (
@@ -140,16 +178,20 @@ export default function Home() {
 
   return (
     <Root>
-      <ColoredDiv style={{ backgroundColor: color ?? "blue" }}>
-        <ImageWrapper>
-          <Image height={400} width={300} src={`/test.svg`} alt={"test"} />
-        </ImageWrapper>
+      <ColoredDiv style={{ backgroundColor: color ?? "blue" }} ref={ref}>
+        {/* <ImageWrapper> */}
+        {/* <Image height={400} width={200} src={`/moonpage.png`} alt={"test"} /> */}
+        {/* </ImageWrapper> */}
+        <TestBook>
+          <h3>Balblabla</h3>
+          <AuthorName>{`by ${authorName}`}</AuthorName>
+          <TextName>#textNFT</TextName>
+        </TestBook>
       </ColoredDiv>
       <StyledForm>
         {/* {address && (
         <div>{`Awesome, you are connected with wallet: ${address}`}</div>
       )} */}
-
         <InputField
           disabled={false}
           value={authorName}
@@ -175,6 +217,7 @@ export default function Home() {
           type="text"
         />
         <div>
+          <StyledLabel>Text</StyledLabel>
           <RichText
             onKeyDown={(val) => setText(val)}
             text={text}
@@ -182,7 +225,7 @@ export default function Home() {
           />
         </div>
         <MintConnectButton
-          onClick={connectToWallet}
+          onClick={handleClick}
           isConnected={!!address}
           isDisabled={
             authorName.length < 2 ||
