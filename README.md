@@ -27,7 +27,7 @@ They then will see a page as below to start creating their text NFT cover page.
 On the right side, the author has flexibility to input name, title and the text. They can format fonts, sizes, and positions. The image on the left will display the outputs as they type. The code will run random background colours and fonts will be changed randomly.
 Once the author clicks PRINT, the image gets captured, a NFT gets created and minted to the author’s wallet.
 
-![Typing, short before creation](https://github.com/julibi/moonprint/blob/main/public/Typing.png)
+![Minting](https://github.com/julibi/moonprint/blob/main/public/Minting.png)
 
 ## Tech
 
