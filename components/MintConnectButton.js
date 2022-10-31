@@ -37,7 +37,7 @@ const MintConnectButton = ({ onClick, isConnected, isDisabled, isLoading }) => {
   }
   return isConnected ? (
     <StyledButton onClick={onClick} isDisabled={isDisabled}>
-      MINT
+      PRINT
     </StyledButton>
   ) : (
     <StyledButton onClick={onClick} isDisabled={isDisabled}>

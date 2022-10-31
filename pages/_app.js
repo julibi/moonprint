@@ -3,6 +3,8 @@ import "../styles/globals.css";
 import Head from "next/head";
 import Layout from "../components/Layout";
 // import "localstorage-polyfill";
+import ToastContainer from "../components/ToastContainer";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -13,6 +15,7 @@ function MyApp({ Component, pageProps }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="app">
+        <ToastContainer />
         <Layout>
           <Component {...pageProps} />
         </Layout>
