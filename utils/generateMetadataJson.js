@@ -3,7 +3,7 @@ export const generateMetadataJson = ({
   minterAddress,
   imageIPFSHash,
 }) => {
-  const metadata = {
+  return JSON.stringify({
     symbol: "NFT",
     name: name,
     decimals: "0", //token
@@ -14,8 +14,5 @@ export const generateMetadataJson = ({
     // formats: "?",
     description: "This is a MoonPrint text NFT",
     creators: minterAddress, // wallet address of person minting th e NFT
-  };
-  console.log({ metadata });
-
-  return JSON.stringify(metadata);
+  });
 };

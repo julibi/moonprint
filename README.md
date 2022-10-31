@@ -1,6 +1,6 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Running it locally
 
 First, run the development server:
 
@@ -12,23 +12,14 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+The App lets you create a text NFT with a beautiful cover image. The color and font of the cover image keeps changing quickly. The moment you hit on mint, it snapshots the current image and sets it as your NFT image.
+https://github.com/julibi/moonprint/blob/main/public/favicon.ico
+![Screenshot](https://github.com/julibi/moonprint/blob/main/Screenshot.png?raw=true)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Prerequisites
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+You need to connect to your tezos wallet of choice. If you have not created a wallet before, we recommend using kukai. It is super simple: You log in to your Google Account in another tab and that is it. You go back to the app's tab and are connected!
 
-## Learn More
+## Deployment
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Merging into main triggers the deployment of the UI with Vercel. The link is [Vercel App Link](moonprint-8zxipwdwx-julibi.vercel.app). Unfortunately we had issues with deployment at some time because of localStorage. So for now, you will have to use this beautiful app in Localhost :)

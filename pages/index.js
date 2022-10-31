@@ -1,10 +1,9 @@
-import { TezosToolkit } from "@taquito/taquito";
+import { ContractAbstraction, TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { useMemo, useState, useEffect, createRef } from "react";
-import Image from "next/image";
+import { useState, useEffect, createRef } from "react";
 import styled from "styled-components";
 import { useScreenshot } from "use-react-screenshot";
-import { fromString } from "uint8arrays/from-string";
+// import { fromString } from "uint8arrays/from-string";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
@@ -195,12 +194,13 @@ export default function Home() {
           minterAddress: address,
           imageIPFSHash: mockImageCID,
         });
+        console.log({ metadata });
         const metadataHash = (await client.add(metadata)).path;
-        console.log({ metadata, metadataHash });
         setMetaDataCID(metadataHash);
         setIsLoading(false);
-        const contract = await Tezos.contract.at(CONTRACT_ADDRESS);
-        console.log({ contract });
+        // const contract = await Tezos.contract.at(CONTRACT_ADDRESS);
+        // console.log({ contract });
+        const bla = await contract.methods.mint({});
       } catch (e) {
         setIsLoading(false);
         console.log({ e });
