@@ -1,22 +1,21 @@
-// all string, just interfaces is an array - hehe, fuck typescript :P
-// e.g.: ["TZIP-007-2021-04-17", "TZIP-016-2021-04-17"]
 export const generateMetadataJson = ({
-  symbol,
   name,
-  icon,
-  description,
-  author,
-  interfaces,
+  minterAddress,
+  imageIPFSHash,
 }) => {
   const metadata = {
-    symbol: symbol,
+    symbol: "NFT",
     name: name,
-    decimals: "0",
-    icon: icon,
-    description: "Token description",
-    authors: "author",
-    interfaces: interfaces,
+    decimals: "0", //token
+    artifactUri: `ipfs://${imageIPFSHash}`,
+    thumbnailUri: `ipfs://${imageIPFSHash}`,
+    displayUri: `ipfs://${imageIPFSHash}`,
+    // tags: "?",
+    // formats: "?",
+    description: "This is a MoonPrint text NFT",
+    creators: minterAddress, // wallet address of person minting th e NFT
   };
+  console.log({ metadata });
 
   return JSON.stringify(metadata);
 };

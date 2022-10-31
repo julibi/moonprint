@@ -14,6 +14,10 @@ import { truncateAddress } from "../utils/truncateAddress";
 
 const Root = styled.div`
   display: flex;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const ColoredDiv = styled.div`
@@ -24,6 +28,10 @@ const ColoredDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 const AuthorName = styled.span`
@@ -51,6 +59,10 @@ const StyledForm = styled.div`
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   padding: 24px;
   width: 50%;
+
+  @media (max-width: 900px) {
+    width: 100%;
+  }
 `;
 
 export const Title = styled.h1`
@@ -139,7 +151,7 @@ export default function Home() {
   const [metaDataCID, setMetaDataCID] = useState();
   const client = useIpfsClient();
   const mockImageCID = "QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8";
-  const CONTRACT_ADDRESS = "tz2DaT8xhjN4T9L9H6Su6nVprEq5E5kQfJz1";
+  const CONTRACT_ADDRESS = "KT1TezoooozzSmartPyzzSTATiCzzzwwBFA";
   const FONTS = ["Times New Roman", "monospace", "Arial"];
 
   const ref = createRef(null);
@@ -179,15 +191,12 @@ export default function Home() {
         // const imageCID = (await client.add(buffer)).path;
         // console.log({ imageCID });
         const metadata = generateMetadataJson({
-          symbol: "symbol",
           name: title,
-          icon: "bla.svg",
-          description: "description is my great work",
-          author: authorName,
-          interfaces: ["TZIP-012-2020-11-17"],
+          minterAddress: address,
+          imageIPFSHash: mockImageCID,
         });
         const metadataHash = (await client.add(metadata)).path;
-        console.log({ metadataHash });
+        console.log({ metadata, metadataHash });
         setMetaDataCID(metadataHash);
         setIsLoading(false);
         const contract = await Tezos.contract.at(CONTRACT_ADDRESS);
