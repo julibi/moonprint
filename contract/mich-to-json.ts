@@ -1,6 +1,8 @@
 import { TezosToolkit } from '@taquito/taquito';
-//import * as michelcodec from '@taquito/michel-codec';
+import * as michelcodec from '@taquito/michel-codec';
 import { Parser, ParserOptions } from '@taquito/michel-codec';
+import * as fs from 'fs';
+
 
 
 const code = `{ parameter
@@ -429,6 +431,10 @@ const code = `{ parameter
 
 const p = new Parser();
 const result = p.parseMichelineExpression(code);
-console.log(JSON.stringify(result));
+
+var fss = require('fs');
+let json = JSON.stringify(result);
+fss.writeFile('fa2_nft-mich.json', json);
+
 
 
