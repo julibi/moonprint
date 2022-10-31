@@ -1,11 +1,11 @@
 import { importKey } from '@taquito/signer';
-import { TezosToolkit } from '@taquito/taquito';
+import { MichelCodecPacker, TezosToolkit } from '@taquito/taquito';
 const Tezos = new TezosToolkit('https://jakartanet.ecadinfra.com');
 importKey(Tezos, "p2sk2obfVMEuPUnadAConLWk7Tf4Dt3n4svSgJwrgpamRqJXvaYcg1")
 
 Tezos.contract
   .originate({
-    code: genericMultisigJSONfile,
+    code:fa2_nft-mich.json,
     storage: {
       stored_counter: 0,
       threshold: 1,

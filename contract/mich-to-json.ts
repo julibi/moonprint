@@ -1,4 +1,4 @@
-import { TezosToolkit } from '@taquito/taquito';
+import { createRegisterGlobalConstantOperation, TezosToolkit } from '@taquito/taquito';
 import * as michelcodec from '@taquito/michel-codec';
 import { Parser, ParserOptions } from '@taquito/michel-codec';
 import * as fs from 'fs';
@@ -430,11 +430,15 @@ const code = `{ parameter
          PAIR } }`;
 
 const p = new Parser();
-const result = p.parseMichelineExpression(code);
+const myresult = p.parseMichelineExpression(code);
 
 var fss = require('fs');
-let json = JSON.stringify(result);
-fss.writeFile('fa2_nft-mich.json', json);
+let json = JSON.stringify(myresult);
+fss.writeFile('fa2_nft-mich.json', json, function(err, result) {
+    if(err) console.log('error', err);
+    console.log("result..", result)
+  });
+
 
 
 
