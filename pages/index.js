@@ -3,13 +3,14 @@ import { BeaconWallet } from "@taquito/beacon-wallet";
 import { useState, useEffect, createRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
-import { useScreenshot, createFileName } from "use-react-screenshot";
+import { useScreenshot } from "use-react-screenshot";
 import { fromString } from "uint8arrays/from-string";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
 import { useIpfsClient } from "../hooks/useIpfsClient";
 import { generateMetadataJson } from "../utils/generateMetadataJson";
+import { truncateAddress } from "../utils/truncateAddress";
 
 const Root = styled.div`
   display: flex;
@@ -55,6 +56,12 @@ const StyledForm = styled.div`
 export const Title = styled.h1`
   line-height: 1.25rem;
   margin-bottom: 3rem;
+`;
+
+const WalletInfo = styled.span`
+  position: absolute;
+  top: 3rem;
+  right: 3rem;
 `;
 
 export const Label = styled.label`
@@ -118,7 +125,6 @@ export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
   const wallet = new BeaconWallet({ name: "Beacon Docs Taquito" });
   const [address, setAddress] = useState();
-
   const [authorName, setAuthorName] = useState("");
   const [title, setTitle] = useState("");
   const [isAuthorNameFocused, setIsAuthorNameFocued] = useState(false);
@@ -129,12 +135,12 @@ export default function Home() {
   const [image, takeScreenshot] = useScreenshot();
   const [imageCID, setImageCID] = useScreenshot();
   const [isLoading, setIsLoading] = useState(false);
+  const [metaDataCID, setMetaDataCID] = useState();
   const client = useIpfsClient();
   const mockImageCID = "QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8";
-
   const ref = createRef(null);
   const getImage = () => takeScreenshot(ref.current);
-
+  console.log({ metaDataCID });
   Tezos.setWalletProvider(wallet);
 
   // const downloadScreenshot = () => takeScreenshot(ref.current).then(download);
@@ -161,27 +167,30 @@ export default function Home() {
       setIsLoading(true);
       setColor("#eac08c");
       setIsStopped(true);
-      getImage();
-      if (image) {
-        try {
-          // const buffer = Buffer.from(image, "base64");
-          // const imageCID = (await client.add(buffer)).path;
-          // console.log({ imageCID });
-          setImageCID(mockImageCID);
-          const metadara = generateMetadataJson({
-            symbol: "symbol",
-            name: title,
-            icon: "bla.svg",
-            description: "description is my great work",
-            author: authorName,
-            interfaces: ["TZIP-012-2020-11-17"],
-          });
-          setIsLoading(false);
-        } catch (e) {
-          setIsLoading(false);
-          console.log({ e });
-        }
+      // getImage();
+      // if (image) {
+      try {
+        // const buffer = Buffer.from(image, "base64");
+        // const imageCID = (await client.add(buffer)).path;
+        // console.log({ imageCID });
+        setImageCID(mockImageCID);
+        const metadata = generateMetadataJson({
+          symbol: "symbol",
+          name: title,
+          icon: "bla.svg",
+          description: "description is my great work",
+          author: authorName,
+          interfaces: ["TZIP-012-2020-11-17"],
+        });
+        const metadataHash = (await client.add(metadata)).path;
+        console.log({ metadataHash });
+        setMetaDataCID(metadataHash);
+        setIsLoading(false);
+      } catch (e) {
+        setIsLoading(false);
+        console.log({ e });
       }
+      // }
     }
   };
 
@@ -210,9 +219,6 @@ export default function Home() {
   return (
     <Root>
       <ColoredDiv style={{ backgroundColor: color ?? "blue" }} ref={ref}>
-        {/* <ImageWrapper> */}
-        {/* <Image height={400} width={200} src={`/moonpage.png`} alt={"test"} /> */}
-        {/* </ImageWrapper> */}
         <TestBook>
           <h3>{title}</h3>
           <AuthorName>{`by ${authorName}`}</AuthorName>
@@ -221,9 +227,11 @@ export default function Home() {
       </ColoredDiv>
       <StyledForm>
         <Title>MoonPrint</Title>
-        {/* {address && (
-        <div>{`Awesome, you are connected with wallet: ${address}`}</div>
-      )} */}
+        <WalletInfo>
+          {address
+            ? `Connected with: ${truncateAddress(address)}`
+            : "Not connected"}
+        </WalletInfo>
         <InputField
           disabled={isLoading}
           value={authorName}
