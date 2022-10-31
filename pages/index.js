@@ -3,12 +3,13 @@ import { BeaconWallet } from "@taquito/beacon-wallet";
 import { useState, useEffect, createRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
+import { useScreenshot, createFileName } from "use-react-screenshot";
+import { fromString } from "uint8arrays/from-string";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
 import RichText from "../components/RichText";
-import { useScreenshot, createFileName } from "use-react-screenshot";
 import { useIpfsClient } from "../hooks/useIpfsClient";
-import { fromString } from "uint8arrays/from-string";
+import { generateMetadataJson } from "../utils/generateMetadataJson";
 
 const Root = styled.div`
   display: flex;
@@ -52,9 +53,8 @@ const StyledForm = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 1rem;
   line-height: 1.25rem;
-  margin-top: 0;
+  margin-bottom: 3rem;
 `;
 
 export const Label = styled.label`
@@ -126,11 +126,11 @@ export default function Home() {
   const [text, setText] = useState();
   const [isStopped, setIsStopped] = useState(false);
   const [color, setColor] = useState();
-  const [image, takeScreenshot] = useScreenshot({
-    type: "image/jpeg",
-    quality: 1.0,
-  });
+  const [image, takeScreenshot] = useScreenshot();
+  const [imageCID, setImageCID] = useScreenshot();
+  const [isLoading, setIsLoading] = useState(false);
   const client = useIpfsClient();
+  const mockImageCID = "QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8";
 
   const ref = createRef(null);
   const getImage = () => takeScreenshot(ref.current);
@@ -141,9 +141,12 @@ export default function Home() {
 
   const connectToWallet = async () => {
     try {
+      setIsLoading(true);
       const permissions = await wallet.client.requestPermissions();
       setAddress(permissions.address);
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       console.log("Got error:", error);
     }
   };
@@ -152,21 +155,30 @@ export default function Home() {
     if (!address) {
       connectToWallet();
     } else {
+      // TODO uploading the image on ipfs does not work atm somehow
+      // so we are mocking the screenshotted image saved under this CID on ipfs:
+      // QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8
+      setIsLoading(true);
+      setColor("#eac08c");
       setIsStopped(true);
       getImage();
       if (image) {
         try {
-          // console.log(image.split(",")[1]);
-          // const data = fromString(image.split(",")[1], "base64");
-          console.log({ image });
-          const imageCID = (await client.add(image)).path;
-          console.log({ imageCID });
-          // const imageCID = (
-          //   await client.add("datadatadatadatadatadatadatadatadatadata")
-          // ).path;
-
-          console.log({ imageCID });
+          // const buffer = Buffer.from(image, "base64");
+          // const imageCID = (await client.add(buffer)).path;
+          // console.log({ imageCID });
+          setImageCID(mockImageCID);
+          const metadara = generateMetadataJson({
+            symbol: "symbol",
+            name: title,
+            icon: "bla.svg",
+            description: "description is my great work",
+            author: authorName,
+            interfaces: ["TZIP-012-2020-11-17"],
+          });
+          setIsLoading(false);
         } catch (e) {
+          setIsLoading(false);
           console.log({ e });
         }
       }
@@ -208,11 +220,12 @@ export default function Home() {
         </TestBook>
       </ColoredDiv>
       <StyledForm>
+        <Title>MoonPrint</Title>
         {/* {address && (
         <div>{`Awesome, you are connected with wallet: ${address}`}</div>
       )} */}
         <InputField
-          disabled={false}
+          disabled={isLoading}
           value={authorName}
           onFocus={() => setIsAuthorNameFocued(true)}
           onChange={(e) => setAuthorName(e.target.value)}
@@ -226,7 +239,7 @@ export default function Home() {
           type="text"
         />
         <InputField
-          disabled={false}
+          disabled={isLoading}
           onFocus={() => setIsTitleFocused(true)}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -240,7 +253,7 @@ export default function Home() {
           <RichText
             onKeyDown={(val) => setText(val)}
             text={text}
-            isDisabled={false}
+            isDisabled={isLoading}
           />
         </div>
         <MintConnectButton
@@ -251,6 +264,7 @@ export default function Home() {
             title.length < 2 ||
             !text?.[0]?.children?.[0]?.text?.length
           }
+          isLoading={isLoading}
         />
       </StyledForm>
     </Root>

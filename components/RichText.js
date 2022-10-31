@@ -13,10 +13,11 @@ import EditorToolButton from "./EditorToolButton";
 
 const StyledEditable = styled(Editable)`
   // otherwise it shrinks to 24px height somehow
+  color: ${({ isDisabled }) => (isDisabled ? "grey" : "black")};
   border: 1px solid grey;
   border-radius: 5px;
   margin-bottom: 24px;
-  min-height: 500px !important;
+  min-height: 370px !important;
   max-height: 1000px !important;
   margin-block-start: 1rem;
   padding: 1rem;
@@ -45,21 +46,66 @@ const RichText = ({ onKeyDown, text, isDisabled = false }) => {
   return (
     <Slate editor={editor} value={text || initialValue} onChange={onKeyDown}>
       <Toolbar>
-        <MarkButton format="bold" icon="format_bold" />
-        <MarkButton format="italic" icon="format_italic" />
-        <MarkButton format="underline" icon="format_underlined" />
+        <MarkButton format="bold" icon="format_bold" isDisabled={isDisabled} />
+        <MarkButton
+          format="italic"
+          icon="format_italic"
+          isDisabled={isDisabled}
+        />
+        <MarkButton
+          format="underline"
+          icon="format_underlined"
+          isDisabled={isDisabled}
+        />
         {/* <MarkButton format="code" icon="code" /> */}
-        <BlockButton format="heading-one" icon="looks_one" />
-        <BlockButton format="heading-two" icon="looks_two" />
-        <BlockButton format="block-quote" icon="format_quote" />
-        <BlockButton format="numbered-list" icon="format_list_numbered" />
-        <BlockButton format="bulleted-list" icon="format_list_bulleted" />
-        <BlockButton format="left" icon="format_align_left" />
-        <BlockButton format="center" icon="format_align_center" />
-        <BlockButton format="right" icon="format_align_right" />
-        <BlockButton format="justify" icon="format_align_justify" />
+        <BlockButton
+          format="heading-one"
+          icon="looks_one"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="heading-two"
+          icon="looks_two"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="block-quote"
+          icon="format_quote"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="numbered-list"
+          icon="format_list_numbered"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="bulleted-list"
+          icon="format_list_bulleted"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="left"
+          icon="format_align_left"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="center"
+          icon="format_align_center"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="right"
+          icon="format_align_right"
+          isDisabled={isDisabled}
+        />
+        <BlockButton
+          format="justify"
+          icon="format_align_justify"
+          isDisabled={isDisabled}
+        />
       </Toolbar>
       <StyledEditable
+        isDisabled={isDisabled}
         readOnly={isDisabled}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
@@ -238,10 +284,11 @@ const Leaf = ({ attributes, children, leaf }) => {
   return <span {...attributes}>{children}</span>;
 };
 
-const BlockButton = ({ format, icon }) => {
+const BlockButton = ({ format, icon, isDisabled }) => {
   const editor = useSlate();
   return (
     <EditorToolButton
+      isDisabled={isDisabled}
       active={isBlockActive(
         editor,
         format,
@@ -257,10 +304,11 @@ const BlockButton = ({ format, icon }) => {
   );
 };
 
-const MarkButton = ({ format, icon }) => {
+const MarkButton = ({ format, icon, isDisabled }) => {
   const editor = useSlate();
   return (
     <EditorToolButton
+      isDisabled={isDisabled}
       active={isMarkActive(editor, format)}
       onMouseDown={(event) => {
         event.preventDefault();

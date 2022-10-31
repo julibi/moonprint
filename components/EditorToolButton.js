@@ -7,15 +7,16 @@ export const Root = styled.button`
   background-color: ${({ active }) => (active ? "lightgrey" : "white")};
   border: 1px solid grey;
   border-radius: 5px;
+  color: ${({ isDisabled }) => (isDisabled ? "grey" : "black")};
 
   :hover {
-    cursor: pointer;
+    cursor: ${({ isDisabled }) => (isDisabled ? "default" : "pointer")};
   }
 `;
 
-const EditorToolButton = ({ active, children, onMouseDown }) => {
+const EditorToolButton = ({ active, children, onMouseDown, isDisabled }) => {
   return (
-    <Root active={active} onMouseDown={onMouseDown}>
+    <Root active={active} onMouseDown={onMouseDown} isDisabled={isDisabled}>
       {children}
     </Root>
   );

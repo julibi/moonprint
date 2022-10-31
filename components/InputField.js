@@ -16,6 +16,7 @@ export const StyledInput = styled.input`
   font-size: 16px;
   border-radius: 5px;
   border: 1px solid grey;
+  color: ${({ disabled }) => (disabled ? "grey" : "black")}
   box-shadow: 5px;
   padding: 1rem;
   outline: none;
