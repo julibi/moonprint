@@ -2,7 +2,9 @@ import { ContractAbstraction, TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
 import { useState, useEffect, createRef } from "react";
 import styled from "styled-components";
+import Image from "next/image";
 import { useScreenshot } from "use-react-screenshot";
+import { toast } from "react-toastify";
 // import { fromString } from "uint8arrays/from-string";
 import InputField from "../components/InputField";
 import MintConnectButton from "../components/MintConnectButton";
@@ -130,7 +132,13 @@ const StyledLabel = styled.label`
   margin-block-end: 0.5rem;
 `;
 
-const ImageWrapper = styled.div``;
+const ImageWrapper = styled.div`
+  margin-right: 1rem;
+`;
+
+const ToastWrapper = styled.div`
+  display: flex;
+`;
 
 export default function Home() {
   const Tezos = new TezosToolkit("https://mainnet-tezos.giganode.io");
@@ -194,13 +202,26 @@ export default function Home() {
           minterAddress: address,
           imageIPFSHash: mockImageCID,
         });
-        console.log({ metadata });
+
         const metadataHash = (await client.add(metadata)).path;
         setMetaDataCID(metadataHash);
         setIsLoading(false);
         // const contract = await Tezos.contract.at(CONTRACT_ADDRESS);
         // console.log({ contract });
-        const bla = await contract.methods.mint({});
+        // const bla = await contract.methods.mint({});
+        toast.success(
+          <ToastWrapper>
+            <ImageWrapper>
+              <Image
+                height={"45px"}
+                width={"36px"}
+                src={`/thumbnail.png`}
+                alt={"nft image"}
+              />
+            </ImageWrapper>
+            <span>{"Yay you minted your text NFT!"}</span>
+          </ToastWrapper>
+        );
       } catch (e) {
         setIsLoading(false);
         console.log({ e });
