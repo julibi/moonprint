@@ -1,6 +1,6 @@
 import { TezosToolkit } from "@taquito/taquito";
 import { BeaconWallet } from "@taquito/beacon-wallet";
-import { useState, useEffect, createRef } from "react";
+import { useMemo, useState, useEffect, createRef } from "react";
 import Image from "next/image";
 import styled from "styled-components";
 import { useScreenshot } from "use-react-screenshot";
@@ -132,15 +132,18 @@ export default function Home() {
   const [text, setText] = useState();
   const [isStopped, setIsStopped] = useState(false);
   const [color, setColor] = useState();
+  const [font, setFont] = useState();
   const [image, takeScreenshot] = useScreenshot();
   const [imageCID, setImageCID] = useScreenshot();
   const [isLoading, setIsLoading] = useState(false);
   const [metaDataCID, setMetaDataCID] = useState();
   const client = useIpfsClient();
   const mockImageCID = "QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8";
+  const CONTRACT_ADDRESS = "tz2DaT8xhjN4T9L9H6Su6nVprEq5E5kQfJz1";
+  const FONTS = ["Times New Roman", "monospace", "Arial"];
+
   const ref = createRef(null);
   const getImage = () => takeScreenshot(ref.current);
-  console.log({ metaDataCID });
   Tezos.setWalletProvider(wallet);
 
   // const downloadScreenshot = () => takeScreenshot(ref.current).then(download);
@@ -166,14 +169,15 @@ export default function Home() {
       // QmQwfjMrC8Wfa1MdtTV1r9HRAXhMAqh4z5Kgo6L68hMdw8
       setIsLoading(true);
       setColor("#eac08c");
+      setFont("Arial");
       setIsStopped(true);
+      setImageCID(mockImageCID);
       // getImage();
       // if (image) {
       try {
         // const buffer = Buffer.from(image, "base64");
         // const imageCID = (await client.add(buffer)).path;
         // console.log({ imageCID });
-        setImageCID(mockImageCID);
         const metadata = generateMetadataJson({
           symbol: "symbol",
           name: title,
@@ -186,6 +190,8 @@ export default function Home() {
         console.log({ metadataHash });
         setMetaDataCID(metadataHash);
         setIsLoading(false);
+        const contract = await Tezos.contract.at(CONTRACT_ADDRESS);
+        console.log({ contract });
       } catch (e) {
         setIsLoading(false);
         console.log({ e });
@@ -204,23 +210,34 @@ export default function Home() {
     );
   };
 
+  const randomIntFromInterval = (min, max) => {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  };
+
+  const randFont = () => {
+    const number = randomIntFromInterval(1, 3);
+    return FONTS[number];
+  };
+
   useEffect(() => {
     const interval = setInterval(() => {
       if (isStopped) return;
       // put this back
       setColor(randColor());
+      setFont(randFont());
     }, 300);
 
     return () => {
       clearInterval(interval);
     };
-  }, [isStopped]);
+  }, [isStopped, randFont]);
 
   return (
     <Root>
       <ColoredDiv style={{ backgroundColor: color ?? "blue" }} ref={ref}>
         <TestBook>
-          <h3>{title}</h3>
+          <h1 style={{ fontFamily: font ?? "Times New Roman" }}>{title}</h1>
           <AuthorName>{`by ${authorName}`}</AuthorName>
           <TextName>#textNFT</TextName>
         </TestBook>
