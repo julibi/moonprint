@@ -5,18 +5,18 @@ importKey(Tezos, "p2sk2obfVMEuPUnadAConLWk7Tf4Dt3n4svSgJwrgpamRqJXvaYcg1")
 
 Tezos.contract
   .originate({
-    code:fa2_nft-mich.json,
+    code:'./fa2_nft-mich.json',
     storage: {
-      stored_counter: 0,
-      threshold: 1,
-      keys: ['edpkuLxx9PQD8fZ45eUzrK3BhfDZJHhBuK4Zi49DcEGANwd2rpX82t'],
+        balances: empty_map,
+        metadata: contract_metadata,
+        token_metadata: token_metadata,
     },
   })
   .then((originationOp) => {
-    println(`Waiting for confirmation of origination for ${originationOp.contractAddress}...`);
+    console.log(`Waiting for confirmation of origination for ${originationOp.contractAddress}...`);
     return originationOp.contract();
   })
   .then((contract) => {
-    println(`Origination completed.`);
+    console.log(`Origination completed.`);
   })
-  .catch((error) => println(`Error: ${JSON.stringify(error, null, 2)}`));
+  .catch((error) => console.log(`Error: ${JSON.stringify(error, null, 2)}`));
