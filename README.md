@@ -13,7 +13,7 @@ yarn dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 The App lets you create a text NFT with a beautiful cover image. The color and font of the cover image keeps changing quickly. The moment you hit on mint, it snapshots the current image and sets it as your NFT image.
-https://github.com/julibi/moonprint/blob/main/public/favicon.ico
+
 ![Screenshot](https://github.com/julibi/moonprint/blob/main/Screenshot.png?raw=true)
 
 ## Prerequisites
