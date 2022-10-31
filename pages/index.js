@@ -24,7 +24,6 @@ const Root = styled.div`
 const ColoredDiv = styled.div`
   width: 50%;
   background-color: blue;
-  height: 100vh;
   postition: relative;
   display: flex;
   justify-content: center;
